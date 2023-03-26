@@ -2,8 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { ActionButtons } from "./components/actions/actions.jsx";
-import { Navbar } from "./components/navbar/Navbar";
+import { ActionButtons } from "./components/actions/actions";
 
 import "./styles/main.scss";
 
@@ -14,7 +13,8 @@ config.autoAddCss = false;
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <ActionButtons />
-        <Navbar />
-        <App />
+        <main>
+            <App />
+        </main>
     </React.StrictMode>
 );
