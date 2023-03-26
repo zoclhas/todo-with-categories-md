@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-    @apply bg-slate-300 dark:bg-gray-900;
+    @apply bg-slate-300 dark:bg-gray-900 transition-[background-color] duration-300 ease-in;
 }
