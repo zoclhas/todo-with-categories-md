@@ -1,4 +1,12 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+import {
+    getCategories,
+    createCategory,
+    deleteCategory,
+    updateCategory,
+} from "../../utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,18 +14,21 @@ import {
     faSun,
     faMoon,
     faListUl,
+    faPlus,
+    faPenToSquare,
+    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
 type Theme = "light" | "dark";
 
 export function ActionButtons() {
-    const [theme, setTheme] = useState<Theme>("light");
+    const [theme, setTheme] = useState<Theme>("dark");
 
     useEffect(() => {
         const currentTheme = localStorage.getItem("theme") as Theme;
         setTheme(currentTheme);
 
-        if (currentTheme === "dark") {
+        if (currentTheme === theme) {
             document.documentElement.classList.add("dark");
         } else {
             document.documentElement.classList.remove("dark");
@@ -54,6 +65,27 @@ export function ActionButtons() {
         toggleSidebar();
     };
 
+    const [categories, setCategories] = useState([]);
+    const [catName, setCatName] = useState<string>("");
+
+    useEffect(() => {
+        setCategories(getCategories());
+    }, []);
+
+    const handleCreateCat = (cat: string) => {
+        createCategory(catName);
+        setCategories(getCategories());
+
+        (document.getElementById("add-cat")! as HTMLInputElement).value = "";
+    };
+
+    const handleDeleteCat = (cat: string) => {
+        deleteCategory(cat);
+        setCategories(getCategories());
+    };
+
+    const [editInput, setEditInput] = useState();
+
     return (
         <>
             <div className="fixed bottom-10 left-10 flex flex-col gap-4">
@@ -89,10 +121,7 @@ export function ActionButtons() {
                         id="drawer-categories-label"
                         className="flex items-center mb-4 text-lg font-semibold text-gray-500 dark:text-gray-400"
                     >
-                        <FontAwesomeIcon
-                            icon={faListUl}
-                            style={{ transform: "translateY(1px)" }}
-                        />
+                        <FontAwesomeIcon icon={faListUl} />
                         &nbsp;Categories
                     </h6>
                     <button
@@ -118,13 +147,66 @@ export function ActionButtons() {
                         <span className="sr-only">Close menu</span>
                     </button>
                     <ul className="space-y-2 font-medium">
-                        <li>
-                            <a
-                                href="#"
-                                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 ease-in"
+                        {categories.map((cat, index) => (
+                            <li key={cat}>
+                                <div className="flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-150 ease-in">
+                                    {editInput === index ? (
+                                        <div></div>
+                                    ) : (
+                                        <>
+                                            <a className="ml-3 grow" href={cat}>
+                                                {cat}
+                                            </a>
+                                            <span className="ml-10 mr-3 flex justify-end gap-8 text-slate-400">
+                                                <button
+                                                    onClick={() =>
+                                                        setEditInput(index)
+                                                    }
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faPenToSquare}
+                                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                                    />
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleDeleteCat(cat)
+                                                    }
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faTrash}
+                                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                                    />
+                                                </button>
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                            </li>
+                        ))}
+
+                        <li className="relative">
+                            <form
+                                onSubmit={(e: any) => {
+                                    e.preventDefault();
+                                    handleCreateCat(catName);
+                                }}
                             >
-                                <span className="ml-3">Dashboard</span>
-                            </a>
+                                <input
+                                    type="add"
+                                    id="add-cat"
+                                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-2xl border-l-gray-100 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 outline-none"
+                                    placeholder="Category"
+                                    required
+                                    onChange={(e) => setCatName(e.target.value)}
+                                />
+                                <button
+                                    type="submit"
+                                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-2xl border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 opacity-90 transition-all duration-150 ease-in"
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>
