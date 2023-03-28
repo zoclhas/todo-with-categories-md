@@ -19,6 +19,7 @@ export const ImportModal = () => {
         importData(file as File, (success) => {
             if (success) {
                 setVisible(false);
+                setError("");
                 navigate("/");
             } else {
                 setError("Invalid data structure.");
@@ -94,6 +95,7 @@ export const ImportModal = () => {
                                 <strong>Note: </strong>Uploaded data will
                                 override current.
                             </p>
+                            {error && <strong>{error}</strong>}
                         </div>
                         <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button

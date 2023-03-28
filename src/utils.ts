@@ -155,7 +155,7 @@ export const exportData = () => {
 
     const downloadLink = document.createElement("a");
     downloadLink.style.display = "none";
-    downloadLink.download = "todo-app-export.json";
+    downloadLink.download = `todo-app-export-${Date.now().toString()}.json`;
     downloadLink.href = url;
     downloadLink.click();
 };
