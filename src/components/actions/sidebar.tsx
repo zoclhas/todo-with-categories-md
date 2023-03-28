@@ -6,6 +6,7 @@ import {
     createCategory,
     deleteCategory,
     updateCategory,
+    exportData,
 } from "../../utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +18,7 @@ import {
     faTrash,
     faCheck,
     faXmark,
+    faFileExport,
 } from "@fortawesome/free-solid-svg-icons";
 
 export function Sidebar() {
@@ -27,14 +29,26 @@ export function Sidebar() {
         const sidebar = document.getElementById("default-sidebar")!;
         const backdrop = document.getElementById("drawer-backdrop")!;
 
+        const addTodoForm = document.getElementById(
+            "add-todo-form"
+        ) as HTMLFormElement;
+
         sidebar.classList.toggle("show");
 
         if (sidebar.classList.contains("show")) {
             document.body.style.overflowY = "hidden";
             backdrop.classList.add("show");
+
+            if (addTodoForm) {
+                addTodoForm.style.zIndex = "-1";
+            }
         } else {
             backdrop.classList.remove("show");
             document.body.style.overflowY = "scroll";
+
+            if (addTodoForm) {
+                addTodoForm.style.zIndex = "1";
+            }
         }
     };
 
@@ -57,7 +71,7 @@ export function Sidebar() {
         setCategories(getCategories());
         setEditInput(-1);
 
-        navigate(`/cat/${catName}`);
+        navigate(`/${catName}`);
 
         (document.getElementById("add-cat")! as HTMLInputElement).value = "";
         (document.getElementById("add-cat")! as HTMLInputElement).blur();
@@ -76,7 +90,7 @@ export function Sidebar() {
         setCategories(getCategories());
         setEditInput(-1);
 
-        navigate(`/cat/${newName}`);
+        navigate(`/${newName}`);
     };
 
     useEffect(() => {
@@ -178,7 +192,7 @@ export function Sidebar() {
                                         <>
                                             <Link
                                                 className="ml-3 grow"
-                                                to={`/cat/${cat}`}
+                                                to={`/${cat}`}
                                             >
                                                 {cat}
                                             </Link>
@@ -227,18 +241,28 @@ export function Sidebar() {
                                 <input
                                     type="add"
                                     id="add-cat"
-                                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-2xl border-l-gray-100 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 outline-none"
+                                    className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-l-gray-100 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 outline-none"
                                     placeholder="Category"
                                     required
                                     onChange={(e) => setCatName(e.target.value)}
                                 />
                                 <button
                                     type="submit"
-                                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-2xl border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 opacity-90 transition-all duration-150 ease-in"
+                                    className="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 opacity-90 transition-all duration-150 ease-in"
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
                                 </button>
                             </form>
+                        </li>
+
+                        <li>
+                            <button
+                                className="my-8 flex w-full items-center justify-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-700 transition-all duration-150 ease-in"
+                                onClick={exportData}
+                            >
+                                <FontAwesomeIcon icon={faFileExport} />
+                                &nbsp;Export Data
+                            </button>
                         </li>
                     </ul>
                 </div>

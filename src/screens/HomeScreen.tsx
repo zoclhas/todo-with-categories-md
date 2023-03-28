@@ -10,7 +10,7 @@ export default function HomeScreen() {
 
     useEffect(() => {
         if (categories.length > 0) {
-            navigate(`/cat/${categories[0]}`);
+            navigate(`/${categories[0]}`);
         }
     }, [categories]);
 

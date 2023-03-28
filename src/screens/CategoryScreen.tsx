@@ -78,6 +78,7 @@ export default function CategoryScreen() {
 
             <form
                 className="flex items-center my-8 relative z-[1]"
+                id="add-todo-form"
                 onSubmit={(e) => {
                     e.preventDefault();
                     handleCreateTodo(category.name as string, title);

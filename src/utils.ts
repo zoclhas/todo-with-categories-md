@@ -146,3 +146,16 @@ export const updateTodo = (cat: string, id: string, newTitle: string) => {
 
     localStorage.setItem("todo", JSON.stringify(updatedList));
 };
+
+export const exportData = () => {
+    const data = JSON.parse(localStorage.getItem("todo") || "[]");
+    const jsonString = JSON.stringify(data);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const downloadLink = document.createElement("a");
+    downloadLink.style.display = "none";
+    downloadLink.download = "todo-app-export.json";
+    downloadLink.href = url;
+    downloadLink.click();
+};
