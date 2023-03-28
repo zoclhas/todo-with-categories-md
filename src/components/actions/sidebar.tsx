@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ImportModal } from "./importModal";
 
 import {
     getCategories,
@@ -64,7 +65,11 @@ export function Sidebar() {
 
     useEffect(() => {
         setCategories(getCategories());
-    }, []);
+
+        if (location.pathname === "/") {
+            setCategories(getCategories());
+        }
+    }, [location]);
 
     const handleCreateCat = () => {
         createCategory(catName);
@@ -257,12 +262,15 @@ export function Sidebar() {
 
                         <li>
                             <button
-                                className="my-8 flex w-full items-center justify-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-700 transition-all duration-150 ease-in"
+                                className="mt-8 flex w-full items-center justify-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:bg-gray-600 dark:hover:bg-gray-700 transition-all duration-150 ease-in"
                                 onClick={exportData}
                             >
                                 <FontAwesomeIcon icon={faFileExport} />
                                 &nbsp;Export Data
                             </button>
+                        </li>
+                        <li>
+                            <ImportModal />
                         </li>
                     </ul>
                 </div>

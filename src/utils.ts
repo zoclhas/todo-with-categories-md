@@ -159,3 +159,71 @@ export const exportData = () => {
     downloadLink.href = url;
     downloadLink.click();
 };
+
+function checkUploadedData(data: any): boolean {
+    if (!Array.isArray(data)) {
+        console.log("Data must be an array.");
+        return false;
+    }
+    for (const item of data) {
+        if (!item || typeof item !== "object") {
+            console.log("Invalid data item:", item);
+            return false;
+        }
+        if (!("cat" in item) || typeof item["cat"] !== "string") {
+            console.log("Invalid category:", item.cat);
+            return false;
+        }
+        if (!("todo" in item) || !Array.isArray(item["todo"])) {
+            console.log("Invalid todo list for category:", item.cat);
+            return false;
+        }
+        for (const todoItem of item["todo"]) {
+            if (!todoItem || typeof todoItem !== "object") {
+                console.log(
+                    "Invalid todo item for category:",
+                    item.cat,
+                    todoItem
+                );
+                return false;
+            }
+            if (!("id" in todoItem) || typeof todoItem["id"] !== "string") {
+                console.log(
+                    "Invalid todo item ID for category:",
+                    item.cat,
+                    todoItem.id
+                );
+                return false;
+            }
+            if (
+                !("title" in todoItem) ||
+                typeof todoItem["title"] !== "string"
+            ) {
+                console.log(
+                    "Invalid todo item title for category:",
+                    item.cat,
+                    todoItem.title
+                );
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+export const importData = (
+    file: File,
+    callback: (success: boolean) => void
+): void => {
+    const reader = new FileReader();
+    reader.onload = () => {
+        const data = JSON.parse(reader.result as string);
+        if (checkUploadedData(data)) {
+            localStorage.setItem("todo", JSON.stringify(data));
+            callback(true);
+        } else {
+            callback(false);
+        }
+    };
+    reader.readAsText(file);
+};
