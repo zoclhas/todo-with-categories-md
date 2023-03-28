@@ -59,6 +59,7 @@ export const deleteCategory = (name: string) => {
 };
 
 export const updateCategory = (oldName: string, newName: string) => {
+    console.log(oldName, newName);
     const currentTodo = JSON.parse(localStorage.getItem("todo") || "[]");
     const updatedTodo = currentTodo.map((e: any) => {
         if (e.cat.toLowerCase() === oldName.toLowerCase()) {
