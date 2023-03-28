@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import {
     getCategories,
@@ -20,6 +20,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export function Sidebar() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const toggleSidebar = () => {
         const sidebar = document.getElementById("default-sidebar")!;
         const backdrop = document.getElementById("drawer-backdrop")!;
@@ -52,6 +55,8 @@ export function Sidebar() {
         setCategories(getCategories());
         setEditInput(-1);
 
+        navigate(`/cat/${catName}`);
+
         (document.getElementById("add-cat")! as HTMLInputElement).value = "";
     };
 
@@ -59,13 +64,25 @@ export function Sidebar() {
         deleteCategory(cat);
         setCategories(getCategories());
         setEditInput(-1);
+
+        navigate("/");
     };
 
     const handleUpdateCat = (oldName: string, newName: string) => {
         updateCategory(oldName, newName);
         setCategories(getCategories());
         setEditInput(-1);
+
+        navigate(`/cat/${newName}`);
     };
+
+    useEffect(() => {
+        const sidebar = document.getElementById("default-sidebar")!;
+
+        if (sidebar.classList.contains("show")) {
+            toggleSidebar();
+        }
+    }, [location]);
     return (
         <>
             <button
@@ -156,9 +173,12 @@ export function Sidebar() {
                                         </form>
                                     ) : (
                                         <>
-                                            <a className="ml-3 grow" href={cat}>
+                                            <Link
+                                                className="ml-3 grow"
+                                                to={`/cat/${cat}`}
+                                            >
                                                 {cat}
-                                            </a>
+                                            </Link>
                                             <span className="ml-10 mr-3 flex justify-end gap-8 text-slate-400">
                                                 <button
                                                     onClick={() => {

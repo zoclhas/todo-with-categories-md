@@ -1,11 +1,16 @@
-import { HashRouter, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
+import HomeScreen from "./screens/HomeScreen";
+import CategoryScreen from "./screens/CategoryScreen";
 
 function App() {
     return (
-        <div>
-            <HashRouter></HashRouter>
-            <h1>hi</h1>
-        </div>
+        <main>
+            <Routes>
+                <Route path="/" element={<HomeScreen />} />
+                <Route path="/cat/:name" element={<CategoryScreen />} />
+            </Routes>
+        </main>
     );
 }
 
