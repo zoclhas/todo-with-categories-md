@@ -8,7 +8,7 @@ function App() {
         <main>
             <Routes>
                 <Route path="/" element={<HomeScreen />} />
-                <Route path="/cat/:name" element={<CategoryScreen />} />
+                <Route path="/:name" element={<CategoryScreen />} />
             </Routes>
         </main>
     );

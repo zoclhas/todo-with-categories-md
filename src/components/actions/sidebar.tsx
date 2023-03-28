@@ -30,9 +30,11 @@ export function Sidebar() {
         sidebar.classList.toggle("show");
 
         if (sidebar.classList.contains("show")) {
+            document.body.style.overflowY = "hidden";
             backdrop.classList.add("show");
         } else {
             backdrop.classList.remove("show");
+            document.body.style.overflowY = "scroll";
         }
     };
 
@@ -58,6 +60,7 @@ export function Sidebar() {
         navigate(`/cat/${catName}`);
 
         (document.getElementById("add-cat")! as HTMLInputElement).value = "";
+        (document.getElementById("add-cat")! as HTMLInputElement).blur();
     };
 
     const handleDeleteCat = (cat: string) => {
@@ -87,7 +90,7 @@ export function Sidebar() {
         <>
             <button
                 type="button"
-                className="bg-white dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5  h-[34px] aspect-square flex items-center justify-center transition-all duration-300 ease-in"
+                className="bg-white dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5  h-[34px] aspect-square flex items-center justify-center transition-all duration-300 ease-in shadow-xl max-md:border-2 max-md:border-indigo-300 max-md:dark:border-indigo-700"
                 onClick={toggleSidebar}
             >
                 <FontAwesomeIcon icon={faBars} />

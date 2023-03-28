@@ -51,7 +51,7 @@ export const getTodos = (cat: string) => {
         return "Category does not exist";
     }
 
-    return category.todo;
+    return category.todo.reverse();
 };
 
 export const createTodo = (cat: string, title: string) => {
@@ -102,6 +102,42 @@ export const deleteTodo = (cat: string, id: string) => {
             ...categoryList[categoryIndex],
             todo: [
                 ...todoList.slice(0, todoIndex),
+                ...todoList.slice(todoIndex + 1),
+            ],
+        },
+        ...categoryList.slice(categoryIndex + 1),
+    ];
+
+    localStorage.setItem("todo", JSON.stringify(updatedList));
+};
+
+export const updateTodo = (cat: string, id: string, newTitle: string) => {
+    const categoryList = JSON.parse(localStorage.getItem("todo") || "[]");
+    const categoryIndex = categoryList.findIndex(
+        (e: any) => e.cat.toLowerCase() === cat.toLowerCase()
+    );
+
+    if (categoryIndex === -1) {
+        return "Category does not exist";
+    }
+
+    const todoList = categoryList[categoryIndex].todo;
+    const todoIndex = todoList.findIndex((e: any) => e.id === id);
+
+    if (todoIndex === -1) {
+        return "Todo item does not exist";
+    }
+
+    const updatedList = [
+        ...categoryList.slice(0, categoryIndex),
+        {
+            ...categoryList[categoryIndex],
+            todo: [
+                ...todoList.slice(0, todoIndex),
+                {
+                    ...todoList[todoIndex],
+                    title: newTitle,
+                },
                 ...todoList.slice(todoIndex + 1),
             ],
         },
