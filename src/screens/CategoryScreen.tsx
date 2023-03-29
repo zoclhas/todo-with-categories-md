@@ -2,7 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import { getTodos, createTodo, deleteTodo, updateTodo } from "../utils";
+import {
+    updateCategory,
+    getTodos,
+    createTodo,
+    deleteTodo,
+    updateTodo,
+} from "../utils";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -71,6 +77,27 @@ export default function CategoryScreen() {
         setTitleEditIndex(-1);
     };
 
+    // Editing cat name
+    const [editingCat, setEditingCat] = useState<boolean>(false);
+    const [newCatName, setNewCatName] = useState<string>("");
+
+    const editCat = () => {
+        setEditingCat(true);
+        setNewCatName(category.name as string);
+
+        setTimeout(() => {
+            (document.getElementById("edit-cat")! as HTMLInputElement).value =
+                category.name as string;
+            (document.getElementById("edit-cat")! as HTMLInputElement).focus();
+        }, 1);
+    };
+
+    const handleEditCat = () => {
+        updateCategory(category.name as string, newCatName);
+        setEditingCat(false);
+        navigate(`/${newCatName}`);
+    };
+
     return (
         <>
             <Helmet>
@@ -81,8 +108,47 @@ export default function CategoryScreen() {
                 className="max-w-3xl px-4 pt-10"
                 style={{ margin: "0 auto" }}
             >
-                <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-2xl w-full shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:shadow-md">
-                    <h5>{category.name}</h5>
+                <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-2xl w-full shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:shadow-md flex gap-4">
+                    {editingCat ? (
+                        <form
+                            className="grow flex gap-4 justify-between"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleEditCat();
+                            }}
+                        >
+                            <input
+                                id="edit-cat"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none z-0"
+                                placeholder={category.name}
+                                onChange={(e) => setNewCatName(e.target.value)}
+                            />
+                            <span className="ml-10 mr-3 flex justify-end gap-6 text-slate-400">
+                                <button type="submit">
+                                    <FontAwesomeIcon
+                                        icon={faCheck}
+                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                    />
+                                </button>
+                                <button onClick={() => setEditingCat(false)}>
+                                    <FontAwesomeIcon
+                                        icon={faXmark}
+                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                    />
+                                </button>
+                            </span>
+                        </form>
+                    ) : (
+                        <>
+                            <h5>{category.name}</h5>
+                            <button onClick={editCat}>
+                                <FontAwesomeIcon
+                                    icon={faPenToSquare}
+                                    className="text-slate-400 hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                />
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 <form

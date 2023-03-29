@@ -28,8 +28,13 @@ export const deleteCategory = (name: string) => {
 };
 
 export const updateCategory = (oldName: string, newName: string) => {
-    console.log(oldName, newName);
     const currentTodo = JSON.parse(localStorage.getItem("todo") || "[]");
+    const categories = currentTodo.map((e: any) => e.cat.toLowerCase());
+    if (categories.includes(newName.toLowerCase())) {
+        console.log(`Category ${newName} already exists!`);
+        return "Already exists";
+    }
+
     const updatedTodo = currentTodo.map((e: any) => {
         if (e.cat.toLowerCase() === oldName.toLowerCase()) {
             return { ...e, cat: newName };

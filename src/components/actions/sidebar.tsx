@@ -65,10 +65,6 @@ export function Sidebar() {
 
     useEffect(() => {
         setCategories(getCategories());
-
-        if (location.pathname === "/") {
-            setCategories(getCategories());
-        }
     }, [location]);
 
     const handleCreateCat = () => {
