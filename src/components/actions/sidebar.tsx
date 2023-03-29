@@ -86,6 +86,24 @@ export function Sidebar() {
         navigate("/");
     };
 
+    const editCatName = (cat: string, index: number) => {
+        setEditInput(index);
+        setCatName(cat);
+
+        setTimeout(() => {
+            (
+                document.getElementById(
+                    `update-cat-${index}`
+                )! as HTMLInputElement
+            ).value = cat;
+            (
+                document.getElementById(
+                    `update-cat-${index}`
+                )! as HTMLInputElement
+            ).focus();
+        }, 1);
+    };
+
     const handleUpdateCat = (oldName: string, newName: string) => {
         updateCategory(oldName, newName);
         setCategories(getCategories());
@@ -161,7 +179,7 @@ export function Sidebar() {
                                             }}
                                         >
                                             <input
-                                                id={`update-input-${index}`}
+                                                id={`update-cat-${index}`}
                                                 placeholder={catName}
                                                 className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-2xl border-l-gray-100 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500 outline-none"
                                                 onChange={(e) =>
@@ -200,14 +218,7 @@ export function Sidebar() {
                                             <span className="ml-10 mr-3 flex justify-end gap-8 text-slate-400">
                                                 <button
                                                     onClick={() => {
-                                                        setEditInput(index);
-                                                        setCatName(cat);
-
-                                                        document
-                                                            .getElementById(
-                                                                `update-input-${index}`
-                                                            )!
-                                                            .focus();
+                                                        editCatName(cat, index);
                                                     }}
                                                 >
                                                     <FontAwesomeIcon
