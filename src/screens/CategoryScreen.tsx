@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 
 import {
     updateCategory,
+    updateLastOpened,
     getTodos,
     createTodo,
     deleteTodo,
@@ -31,6 +32,7 @@ export default function CategoryScreen() {
             navigate("/");
         } else {
             setTodos(todos);
+            updateLastOpened(category.name as string);
         }
     }, [category]);
 

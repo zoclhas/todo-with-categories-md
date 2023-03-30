@@ -2,15 +2,23 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Sidebar } from "../components/actions/sidebar";
-import { getCategories } from "../utils";
+import { getCategories, getLastOpened } from "../utils";
 
 export default function HomeScreen() {
     const navigate = useNavigate();
     const categories = getCategories();
+    const lastOpened = getLastOpened();
 
     useEffect(() => {
+        const lastOpenedEnabled = localStorage.getItem("lastOpenedEnabled");
+        const isEnabled = lastOpenedEnabled === "true" ? true : false;
+
         if (categories.length > 0) {
-            navigate(`/${categories[0]}`);
+            if (lastOpened && isEnabled) {
+                navigate(`/${lastOpened}`);
+            } else {
+                navigate(`/${categories[0]}`);
+            }
         }
     }, [categories]);
 

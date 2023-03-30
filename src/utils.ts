@@ -44,6 +44,38 @@ export const updateCategory = (oldName: string, newName: string) => {
     localStorage.setItem("todo", JSON.stringify(updatedTodo));
 };
 
+export const getLastOpened = () => {
+    const currentTodo = JSON.parse(localStorage.getItem("todo") || "[]");
+    let catValue = null;
+    currentTodo.some((e: any) => {
+        if (e.lastOpened) {
+            catValue = e.cat;
+            return true;
+        }
+    });
+    return catValue;
+};
+
+export const updateLastOpened = (cat: string) => {
+    const currentTodo = JSON.parse(localStorage.getItem("todo") || "[]");
+
+    const prevLastOpened = currentTodo.map((e: any) => {
+        if (e.lastOpened) {
+            return { ...e, lastOpened: false };
+        }
+        return e;
+    });
+
+    const updateLastOpened = prevLastOpened.map((e: any) => {
+        if (e.cat.toLowerCase() === cat.toLowerCase()) {
+            return { ...e, lastOpened: true };
+        }
+        return e;
+    });
+
+    localStorage.setItem("todo", JSON.stringify(updateLastOpened));
+};
+
 // Todo in Category
 
 export const getTodos = (cat: string) => {
