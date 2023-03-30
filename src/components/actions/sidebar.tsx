@@ -129,7 +129,7 @@ export function Sidebar() {
         );
 
         if (lastOpened === null) {
-            localStorage.setItem("lastOpenedEnabled", true);
+            localStorage.setItem("lastOpenedEnabled", "true");
         }
     }, []);
 
