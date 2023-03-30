@@ -274,22 +274,18 @@ export const importData = (
 
             let newTodo = [...currentTodo];
 
-            // loop through each category in the uploaded data
             for (let category of data) {
-                let newCategory = { ...category }; // create a new object for the category
+                let newCategory = { ...category };
 
-                // check if the category already exists in the currentTodo array
                 let count = 1;
                 while (newTodo.some((c) => c.cat === newCategory.cat)) {
                     newCategory.cat = `${category.cat} (${count++})`;
                 }
 
-                // loop through each item in the category and add the category name to it
                 for (let item of newCategory.todo) {
                     item.cat = newCategory.cat;
                 }
 
-                // add the new category to the newTodo array
                 newTodo.push(newCategory);
             }
 
