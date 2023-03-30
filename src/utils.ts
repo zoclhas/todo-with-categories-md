@@ -248,6 +248,17 @@ function checkUploadedData(data: any): boolean {
     return true;
 }
 
+function removeAllLastOpened(todos: Array<[]>) {
+    const removed = todos.map((e: any) => {
+        if (e.lastOpened) {
+            return { ...e, lastOpened: false };
+        }
+        return e;
+    });
+
+    return removed;
+}
+
 export const importData = (
     file: File,
     callback: (success: boolean) => void
@@ -255,12 +266,48 @@ export const importData = (
     const reader = new FileReader();
     reader.onload = () => {
         const data = JSON.parse(reader.result as string);
+
         if (checkUploadedData(data)) {
-            localStorage.setItem("todo", JSON.stringify(data));
-            callback(true);
+            const currentTodo = JSON.parse(
+                localStorage.getItem("todo") || "[]"
+            );
+
+            const count: Record<string, number> = {};
+
+            data.forEach((d: any) => {
+                const category = d.cat.toLowerCase();
+                let index = count[category];
+
+                if (!index) {
+                    index = 1;
+                } else {
+                    index += 1;
+                }
+
+                count[category] = index;
+
+                if (index > 1) {
+                    d.cat = `${d.cat}(${index})`;
+                }
+            });
+
+            if (currentTodo.length > 0) {
+                const newTodo = removeAllLastOpened([...currentTodo, ...data]);
+                localStorage.setItem("todo", JSON.stringify(newTodo));
+                callback(true);
+            } else {
+                localStorage.setItem("todo", JSON.stringify(data));
+                callback(true);
+            }
         } else {
             callback(false);
         }
     };
     reader.readAsText(file);
+};
+
+// Super functions
+
+export const deleteAll = () => {
+    localStorage.removeItem("todo");
 };

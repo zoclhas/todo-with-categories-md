@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ImportModal } from "./importModal";
+import { DeleteAllButton } from "./deleteAll";
 
 import {
     getCategories,
@@ -120,6 +121,7 @@ export function Sidebar() {
         }
     }, [location]);
 
+    // Last Opened
     const [isChecked, setIsChecked] = useState<boolean>(false);
 
     useEffect(() => {
@@ -314,6 +316,9 @@ export function Sidebar() {
                                     Enable Last Opened
                                 </span>
                             </label>
+                        </li>
+                        <li>
+                            <DeleteAllButton />
                         </li>
                     </ul>
                 </div>

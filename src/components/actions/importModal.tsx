@@ -88,13 +88,6 @@ export const ImportModal = () => {
                                     }
                                 }}
                             />
-                            <p
-                                className="mt-1 text-sm text-gray-500 dark:text-gray-300"
-                                id="file_input_help"
-                            >
-                                <strong>Note: </strong>Uploaded data will
-                                override current.
-                            </p>
                             {error && <strong>{error}</strong>}
                         </div>
                         <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
