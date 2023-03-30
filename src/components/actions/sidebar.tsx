@@ -123,8 +123,10 @@ export function Sidebar() {
     const [isChecked, setIsChecked] = useState<boolean>(false);
 
     useEffect(() => {
-        const lastOpened = localStorage.getItem("lastOpenedEnabled") || false;
-        setIsChecked(lastOpened === "true" ? true : false);
+        const lastOpened = localStorage.getItem("lastOpenedEnabled");
+        setIsChecked(
+            lastOpened === "true" || lastOpened === null ? true : false
+        );
     }, []);
 
     const toggleLastOpened = (e: any) => {
