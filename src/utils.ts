@@ -272,33 +272,29 @@ export const importData = (
                 localStorage.getItem("todo") || "[]"
             );
 
-            const count: Record<string, number> = {};
+            let newTodo = [...currentTodo];
 
-            data.forEach((d: any) => {
-                const category = d.cat.toLowerCase();
-                let index = count[category];
+            // loop through each category in the uploaded data
+            for (let category of data) {
+                let newCategory = { ...category }; // create a new object for the category
 
-                if (!index) {
-                    index = 1;
-                } else {
-                    index += 1;
+                // check if the category already exists in the currentTodo array
+                let count = 1;
+                while (newTodo.some((c) => c.cat === newCategory.cat)) {
+                    newCategory.cat = `${category.cat} (${count++})`;
                 }
 
-                count[category] = index;
-
-                if (index > 1) {
-                    d.cat = `${d.cat}(${index})`;
+                // loop through each item in the category and add the category name to it
+                for (let item of newCategory.todo) {
+                    item.cat = newCategory.cat;
                 }
-            });
 
-            if (currentTodo.length > 0) {
-                const newTodo = removeAllLastOpened([...currentTodo, ...data]);
-                localStorage.setItem("todo", JSON.stringify(newTodo));
-                callback(true);
-            } else {
-                localStorage.setItem("todo", JSON.stringify(data));
-                callback(true);
+                // add the new category to the newTodo array
+                newTodo.push(newCategory);
             }
+
+            localStorage.setItem("todo", JSON.stringify(newTodo));
+            callback(true);
         } else {
             callback(false);
         }
