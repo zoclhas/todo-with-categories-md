@@ -15,6 +15,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
         <ActionButtons />
         <App />
-        <Analytics />;
+        <Analytics />
     </BrowserRouter>
 );
