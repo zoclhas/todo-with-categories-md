@@ -127,6 +127,10 @@ export function Sidebar() {
         setIsChecked(
             lastOpened === "true" || lastOpened === null ? true : false
         );
+
+        if (lastOpened === null) {
+            localStorage.setItem("lastOpenedEnabled", true);
+        }
     }, []);
 
     const toggleLastOpened = (e: any) => {
