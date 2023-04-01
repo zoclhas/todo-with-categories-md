@@ -79,3 +79,22 @@ p {
         @apply bg-blue-800 dark:bg-blue-600;
     }
 }
+
+.prose {
+    width: 100%;
+
+    code[class*="language-"],
+    pre[class*="language-"] {
+        text-shadow: none;
+        background: none;
+    }
+    pre {
+        text-shadow: none;
+
+        code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: justify;
+        }
+    }
+}
