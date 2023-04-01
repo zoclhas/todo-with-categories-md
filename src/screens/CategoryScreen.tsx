@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import Prism from "prismjs";
+import { Markdown } from "../components/markdown/markdown";
 
 import {
     updateCategory,
@@ -51,6 +49,9 @@ export default function CategoryScreen() {
         setTitleEditIndex(-1);
 
         (document.getElementById("add-todo")! as HTMLInputElement).value = "";
+        (
+            document.getElementById("add-todo")! as HTMLInputElement
+        ).style.height = "auto";
         setTitle("");
     };
 
@@ -228,76 +229,7 @@ export default function CategoryScreen() {
                             {title.length > 0 && (
                                 <li className="m-4 p-3 bg-blue-100 dark:bg-slate-700 rounded-xl flex gap-4 justify-between">
                                     <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                        <ReactMarkdown
-                                            rehypePlugins={[rehypeRaw]}
-                                            children={title}
-                                            components={{
-                                                code: ({
-                                                    node,
-                                                    inline,
-                                                    className,
-                                                    children,
-                                                    ...props
-                                                }) => {
-                                                    const match =
-                                                        /language-(\w+)/.exec(
-                                                            className || ""
-                                                        )!;
-
-                                                    if (!inline && match) {
-                                                        if (
-                                                            Prism.languages[
-                                                                match[1]
-                                                            ]
-                                                        ) {
-                                                            return (
-                                                                <code
-                                                                    className={`language-${match[1]}`}
-                                                                    {...props}
-                                                                    dangerouslySetInnerHTML={{
-                                                                        __html: `${Prism.highlight(
-                                                                            String(
-                                                                                children
-                                                                            ).replace(
-                                                                                /\n$/,
-                                                                                ""
-                                                                            ),
-                                                                            Prism
-                                                                                .languages[
-                                                                                match[1]
-                                                                            ],
-                                                                            match[1]
-                                                                        )}`,
-                                                                    }}
-                                                                ></code>
-                                                            );
-                                                        }
-
-                                                        return (
-                                                            <code
-                                                                className={
-                                                                    className
-                                                                }
-                                                                {...props}
-                                                            >
-                                                                {children}
-                                                            </code>
-                                                        );
-                                                    }
-
-                                                    return (
-                                                        <code
-                                                            className={
-                                                                className
-                                                            }
-                                                            {...props}
-                                                        >
-                                                            {children}
-                                                        </code>
-                                                    );
-                                                },
-                                            }}
-                                        />
+                                        <Markdown children={title} />
                                     </div>
                                 </li>
                             )}
@@ -367,86 +299,8 @@ export default function CategoryScreen() {
 
                                             {newTitle.length > 0 && (
                                                 <div className="prose dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                                    <ReactMarkdown
-                                                        rehypePlugins={[
-                                                            rehypeRaw,
-                                                        ]}
+                                                    <Markdown
                                                         children={newTitle}
-                                                        components={{
-                                                            code: ({
-                                                                node,
-                                                                inline,
-                                                                className,
-                                                                children,
-                                                                ...props
-                                                            }) => {
-                                                                const match =
-                                                                    /language-(\w+)/.exec(
-                                                                        className ||
-                                                                            ""
-                                                                    )!;
-
-                                                                if (
-                                                                    !inline &&
-                                                                    match
-                                                                ) {
-                                                                    if (
-                                                                        Prism
-                                                                            .languages[
-                                                                            match[1]
-                                                                        ]
-                                                                    ) {
-                                                                        return (
-                                                                            <code
-                                                                                className={`language-${match[1]}`}
-                                                                                {...props}
-                                                                                dangerouslySetInnerHTML={{
-                                                                                    __html: `${Prism.highlight(
-                                                                                        String(
-                                                                                            children
-                                                                                        ).replace(
-                                                                                            /\n$/,
-                                                                                            ""
-                                                                                        ),
-                                                                                        Prism
-                                                                                            .languages[
-                                                                                            match[1]
-                                                                                        ],
-                                                                                        match[1]
-                                                                                    )}`,
-                                                                                }}
-                                                                            ></code>
-                                                                        );
-                                                                    }
-
-                                                                    return (
-                                                                        <code
-                                                                            className={
-                                                                                className
-                                                                            }
-                                                                            {...props}
-                                                                        >
-                                                                            {
-                                                                                children
-                                                                            }
-                                                                        </code>
-                                                                    );
-                                                                }
-
-                                                                return (
-                                                                    <code
-                                                                        className={
-                                                                            className
-                                                                        }
-                                                                        {...props}
-                                                                    >
-                                                                        {
-                                                                            children
-                                                                        }
-                                                                    </code>
-                                                                );
-                                                            },
-                                                        }}
                                                     />
                                                 </div>
                                             )}
@@ -454,82 +308,8 @@ export default function CategoryScreen() {
                                     ) : (
                                         <>
                                             <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                                <ReactMarkdown
-                                                    rehypePlugins={[rehypeRaw]}
+                                                <Markdown
                                                     children={todo.title}
-                                                    components={{
-                                                        code: ({
-                                                            node,
-                                                            inline,
-                                                            className,
-                                                            children,
-                                                            ...props
-                                                        }) => {
-                                                            const match =
-                                                                /language-(\w+)/.exec(
-                                                                    className ||
-                                                                        ""
-                                                                )!;
-
-                                                            if (
-                                                                !inline &&
-                                                                match
-                                                            ) {
-                                                                if (
-                                                                    Prism
-                                                                        .languages[
-                                                                        match[1]
-                                                                    ]
-                                                                ) {
-                                                                    return (
-                                                                        <code
-                                                                            className={`language-${match[1]}`}
-                                                                            {...props}
-                                                                            dangerouslySetInnerHTML={{
-                                                                                __html: `${Prism.highlight(
-                                                                                    String(
-                                                                                        children
-                                                                                    ).replace(
-                                                                                        /\n$/,
-                                                                                        ""
-                                                                                    ),
-                                                                                    Prism
-                                                                                        .languages[
-                                                                                        match[1]
-                                                                                    ],
-                                                                                    match[1]
-                                                                                )}`,
-                                                                            }}
-                                                                        ></code>
-                                                                    );
-                                                                }
-
-                                                                return (
-                                                                    <code
-                                                                        className={
-                                                                            className
-                                                                        }
-                                                                        {...props}
-                                                                    >
-                                                                        {
-                                                                            children
-                                                                        }
-                                                                    </code>
-                                                                );
-                                                            }
-
-                                                            return (
-                                                                <code
-                                                                    className={
-                                                                        className
-                                                                    }
-                                                                    {...props}
-                                                                >
-                                                                    {children}
-                                                                </code>
-                                                            );
-                                                        },
-                                                    }}
                                                 />
                                             </div>
                                             <span className="ml-10 mr-3 flex justify-end gap-6 text-slate-400">
