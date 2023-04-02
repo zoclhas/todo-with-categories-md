@@ -139,6 +139,8 @@ export default function CategoryScreen() {
         textarea.style.height = textarea.scrollHeight + "px";
     };
 
+    const isEmpty = (todos && todos.length > 0) || title.length > 0;
+
     return (
         <>
             <Helmet>
@@ -223,7 +225,7 @@ export default function CategoryScreen() {
                     </button>
                 </form>
 
-                {todos && todos.length > 0 && (
+                {isEmpty && (
                     <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl w-full shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:shadow-md">
                         <ul>
                             {title.length > 0 && (
