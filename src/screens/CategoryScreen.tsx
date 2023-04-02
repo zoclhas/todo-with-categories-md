@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import Fade from "react-reveal/Fade";
+
 import { Markdown } from "../components/markdown/markdown";
 
 import {
@@ -225,126 +229,128 @@ export default function CategoryScreen() {
 
                 {todos && todos.length > 0 && (
                     <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl w-full shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:shadow-md">
-                        <ul>
-                            {title.length > 0 && (
-                                <li className="m-4 p-3 bg-blue-100 dark:bg-slate-700 rounded-xl flex gap-4 justify-between">
-                                    <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                        <Markdown children={title} />
-                                    </div>
-                                </li>
-                            )}
-                            {todos.map((todo: any, index) => (
-                                <li
-                                    key={todo.id}
-                                    className={`m-4 p-3 bg-blue-100 dark:bg-slate-700 rounded-xl ${
-                                        titleEditIndex === index
-                                            ? "flex flex-col gap-8"
-                                            : "flex gap-4 justify-between"
-                                    }`}
-                                >
-                                    {titleEditIndex === index ? (
-                                        <>
-                                            <form
-                                                className="grow flex gap-4 justify-between"
-                                                onSubmit={(e) => {
-                                                    e.preventDefault();
-                                                    handleUpdateTodo(
-                                                        category.name as string,
-                                                        todo.id,
-                                                        newTitle
-                                                    );
-                                                }}
-                                            >
-                                                <textarea
-                                                    id={`edit-todo-${index}`}
-                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none z-0 h-max"
-                                                    placeholder={todo.title}
-                                                    onChange={(e) =>
-                                                        setNewTitle(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                    onKeyDown={(e: any) =>
-                                                        handleKeyDown(
-                                                            e,
-                                                            "edit",
-                                                            todo.id
-                                                        )
-                                                    }
-                                                    onKeyUp={(e: any) =>
-                                                        adjustHeight(e)
-                                                    }
-                                                />
+                        <Fade bottom cascade>
+                            <ul>
+                                {title.length > 0 && (
+                                    <li className="m-4 p-3 bg-blue-100 dark:bg-slate-700 rounded-xl flex gap-4 justify-between">
+                                        <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
+                                            <Markdown children={title} />
+                                        </div>
+                                    </li>
+                                )}
+                                {todos.map((todo: any, index) => (
+                                    <li
+                                        key={todo.id}
+                                        className={`m-4 p-3 bg-blue-100 dark:bg-slate-700 rounded-xl ${
+                                            titleEditIndex === index
+                                                ? "flex flex-col gap-8"
+                                                : "flex gap-4 justify-between"
+                                        }`}
+                                    >
+                                        {titleEditIndex === index ? (
+                                            <>
+                                                <form
+                                                    className="grow flex gap-4 justify-between"
+                                                    onSubmit={(e) => {
+                                                        e.preventDefault();
+                                                        handleUpdateTodo(
+                                                            category.name as string,
+                                                            todo.id,
+                                                            newTitle
+                                                        );
+                                                    }}
+                                                >
+                                                    <textarea
+                                                        id={`edit-todo-${index}`}
+                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-2xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 outline-none z-0 h-max"
+                                                        placeholder={todo.title}
+                                                        onChange={(e) =>
+                                                            setNewTitle(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        onKeyDown={(e: any) =>
+                                                            handleKeyDown(
+                                                                e,
+                                                                "edit",
+                                                                todo.id
+                                                            )
+                                                        }
+                                                        onKeyUp={(e: any) =>
+                                                            adjustHeight(e)
+                                                        }
+                                                    />
+                                                    <span className="ml-10 mr-3 flex justify-end gap-6 text-slate-400">
+                                                        <button type="submit">
+                                                            <FontAwesomeIcon
+                                                                icon={faCheck}
+                                                                className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                                            />
+                                                        </button>
+                                                        <button
+                                                            onClick={() =>
+                                                                setTitleEditIndex(
+                                                                    -1
+                                                                )
+                                                            }
+                                                        >
+                                                            <FontAwesomeIcon
+                                                                icon={faXmark}
+                                                                className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
+                                                            />
+                                                        </button>
+                                                    </span>
+                                                </form>
+
+                                                {newTitle.length > 0 && (
+                                                    <div className="prose dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
+                                                        <Markdown
+                                                            children={newTitle}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
+                                                    <Markdown
+                                                        children={todo.title}
+                                                    />
+                                                </div>
                                                 <span className="ml-10 mr-3 flex justify-end gap-6 text-slate-400">
-                                                    <button type="submit">
+                                                    <button
+                                                        onClick={() =>
+                                                            editTodo(
+                                                                index,
+                                                                todo.title
+                                                            )
+                                                        }
+                                                    >
                                                         <FontAwesomeIcon
-                                                            icon={faCheck}
+                                                            icon={faPenToSquare}
                                                             className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
                                                         />
                                                     </button>
                                                     <button
                                                         onClick={() =>
-                                                            setTitleEditIndex(
-                                                                -1
+                                                            handleDeleteTodo(
+                                                                category.name as string,
+                                                                todo.id
                                                             )
                                                         }
                                                     >
                                                         <FontAwesomeIcon
-                                                            icon={faXmark}
+                                                            icon={faSquareCheck}
                                                             className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
                                                         />
                                                     </button>
                                                 </span>
-                                            </form>
-
-                                            {newTitle.length > 0 && (
-                                                <div className="prose dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                                    <Markdown
-                                                        children={newTitle}
-                                                    />
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <div className="prose prose-slate dark:prose-invert prose-p:text-[19px] prose-p:m-0 prose-p:break-words prose-ul:my-2 prose-li:my-0 overflow-auto">
-                                                <Markdown
-                                                    children={todo.title}
-                                                />
-                                            </div>
-                                            <span className="ml-10 mr-3 flex justify-end gap-6 text-slate-400">
-                                                <button
-                                                    onClick={() =>
-                                                        editTodo(
-                                                            index,
-                                                            todo.title
-                                                        )
-                                                    }
-                                                >
-                                                    <FontAwesomeIcon
-                                                        icon={faPenToSquare}
-                                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
-                                                    />
-                                                </button>
-                                                <button
-                                                    onClick={() =>
-                                                        handleDeleteTodo(
-                                                            category.name as string,
-                                                            todo.id
-                                                        )
-                                                    }
-                                                >
-                                                    <FontAwesomeIcon
-                                                        icon={faSquareCheck}
-                                                        className="hover:text-black dark:hover:text-white transition-colors duration-150 ease-in"
-                                                    />
-                                                </button>
-                                            </span>
-                                        </>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
+                                            </>
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </Fade>
                     </div>
                 )}
             </section>
