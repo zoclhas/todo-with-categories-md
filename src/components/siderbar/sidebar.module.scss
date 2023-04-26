@@ -1,0 +1,76 @@
+aside.wrapper {
+    @apply shadow-lg rounded-r-lg;
+    z-index: 99;
+
+    position: fixed;
+    width: 100%;
+    max-width: 300px;
+    height: 100vh;
+
+    margin-right: 1rem;
+
+    display: grid;
+    grid-template-rows: 0.2fr 2.1fr 0.7fr;
+
+    .header {
+        @apply bg-[#292929] bg-opacity-70 backdrop-blur-xl;
+
+        padding: 1rem;
+
+        display: flex;
+        justify-content: space-between;
+
+        .info {
+            display: flex;
+            align-items: center;
+            gap: 1ch;
+        }
+    }
+
+    .categories {
+        @apply bg-[#292929] bg-opacity-60 backdrop-blur-xl h-full overflow-scroll relative;
+
+        ul {
+            @apply flex flex-col gap-4 p-4;
+        }
+
+        form.add {
+            @apply sticky bottom-0 bg-[#292929] bg-opacity-10 backdrop-blur-xl p-4;
+
+            margin-top: 1.5rem;
+
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+    }
+
+    .footer {
+        @apply p-4 bg-[#292929] bg-opacity-70 backdrop-blur-xl;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.backdrop {
+    @apply bg-black bg-opacity-5 backdrop-blur-lg;
+    z-index: 90;
+
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
