@@ -2,6 +2,7 @@ import styles from "../styles/category.module.scss";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import { Markdown } from "../components/markdown/markdown";
 import { Fade } from "react-reveal";
@@ -134,199 +135,208 @@ export default function Category() {
     };
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.header}>
-                {isEditing ? (
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            editCatHandler();
-                        }}
-                    >
-                        <Input
-                            className="grow"
-                            id="edit-cat-input"
-                            size="large"
-                            value={newCatName}
-                            onChange={(e) => setNewCatName(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    if (e.shiftKey) {
-                                        e.preventDefault();
-                                        editCatHandler();
-                                    }
-                                }
+        <>
+            <Helmet>
+                <title>{cat}</title>
+            </Helmet>
+            <div className={styles.wrapper}>
+                <div className={styles.header}>
+                    {isEditing ? (
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                editCatHandler();
                             }}
-                        />
-                        <div className={styles.actions}>
+                        >
+                            <Input
+                                className="grow"
+                                id="edit-cat-input"
+                                size="large"
+                                value={newCatName}
+                                onChange={(e) => setNewCatName(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        if (e.shiftKey) {
+                                            e.preventDefault();
+                                            editCatHandler();
+                                        }
+                                    }
+                                }}
+                            />
+                            <div className={styles.actions}>
+                                <Button
+                                    appearance="primary"
+                                    type="submit"
+                                    icon={<Edit16Filled />}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    appearance="outline"
+                                    icon={<FontAwesomeIcon icon={faCancel} />}
+                                    onClick={() => setIsEditing(false)}
+                                >
+                                    Cancel
+                                </Button>
+                            </div>
+                        </form>
+                    ) : (
+                        <>
+                            <h1 className="font-bold text-4xl">{cat}</h1>
                             <Button
-                                appearance="primary"
-                                type="submit"
-                                icon={<Edit16Filled />}
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                appearance="outline"
-                                icon={<FontAwesomeIcon icon={faCancel} />}
-                                onClick={() => setIsEditing(false)}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                    </form>
-                ) : (
-                    <>
-                        <h1 className="font-bold text-4xl">{cat}</h1>
-                        <Button
-                            appearance="transparent"
-                            icon={<Edit24Filled />}
-                            onClick={editCatInitHandler}
-                        />
-                    </>
-                )}
-            </div>
+                                appearance="transparent"
+                                icon={<Edit24Filled />}
+                                onClick={editCatInitHandler}
+                            />
+                        </>
+                    )}
+                </div>
 
-            <div className="h-16"></div>
-            <form
-                className={styles["add-wrapper"]}
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    createTodoHandler();
-                }}
-            >
-                <Textarea
-                    className="w-full"
-                    value={addTitle}
-                    onKeyDown={(e: any) => handleKeyDown(e, "add")}
-                    onKeyUp={(e: any) => setTextareaHeight(e)}
-                    onChange={(e: any) => {
-                        setAddTitle(e.target.value);
+                <div className="h-16"></div>
+                <form
+                    className={styles["add-wrapper"]}
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        createTodoHandler();
                     }}
-                />
-                <Button
-                    type="submit"
-                    appearance="primary"
-                    size="large"
-                    icon={<Add24Filled />}
                 >
-                    Add (Shift + Enter)
-                </Button>
-            </form>
-            <div className="h-16"></div>
+                    <Textarea
+                        className="w-full"
+                        value={addTitle}
+                        onKeyDown={(e: any) => handleKeyDown(e, "add")}
+                        onKeyUp={(e: any) => setTextareaHeight(e)}
+                        onChange={(e: any) => {
+                            setAddTitle(e.target.value);
+                        }}
+                    />
+                    <Button
+                        type="submit"
+                        appearance="primary"
+                        size="large"
+                        icon={<Add24Filled />}
+                    >
+                        Add (Shift + Enter)
+                    </Button>
+                </form>
+                <div className="h-16"></div>
 
-            <Fade bottom cascade duration={500}>
-                {isNotEmpty && (
-                    <ul className={styles.todos}>
-                        {addTitle.length > 0 && (
-                            <li>
-                                <article className="prose prose-lg prose-invert w-full max-w-none prose-p:m-0">
-                                    <Markdown>{addTitle}</Markdown>
-                                </article>
-                            </li>
-                        )}
-                        {todos.map((todo: any, i) => {
-                            if (titleEditIndex === i) {
+                <Fade bottom cascade duration={500}>
+                    {isNotEmpty && (
+                        <ul className={styles.todos}>
+                            {addTitle.length > 0 && (
+                                <li>
+                                    <article className="prose prose-lg prose-invert w-full max-w-none prose-p:m-0">
+                                        <Markdown>{addTitle}</Markdown>
+                                    </article>
+                                </li>
+                            )}
+                            {todos.map((todo: any, i) => {
+                                if (titleEditIndex === i) {
+                                    return (
+                                        <li key={todo.id}>
+                                            <form
+                                                onSubmit={(e) => {
+                                                    e.preventDefault();
+                                                    updateTodoHandler(todo.id);
+                                                }}
+                                            >
+                                                <div
+                                                    className={`${styles.actions} !mt-0`}
+                                                >
+                                                    <Button
+                                                        size="small"
+                                                        appearance="primary"
+                                                        type="submit"
+                                                        icon={<Edit16Filled />}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        size="small"
+                                                        appearance="outline"
+                                                        icon={
+                                                            <FontAwesomeIcon
+                                                                icon={faCancel}
+                                                            />
+                                                        }
+                                                        onClick={() =>
+                                                            setTitleEditIndex(
+                                                                -1
+                                                            )
+                                                        }
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </div>
+                                                <div className="p-4">
+                                                    <Textarea
+                                                        id={`edit-ta-${i}`}
+                                                        className="w-full"
+                                                        value={newTitle}
+                                                        onKeyDown={(e: any) =>
+                                                            handleKeyDown(
+                                                                e,
+                                                                "edit",
+                                                                todo.id
+                                                            )
+                                                        }
+                                                        onChange={(e: any) => {
+                                                            setTextareaHeight(
+                                                                e
+                                                            );
+                                                            setNewTitle(
+                                                                e.target.value
+                                                            );
+                                                        }}
+                                                    />
+                                                </div>
+                                            </form>
+                                            <div className="h-4"></div>
+                                            <article className="prose prose-lg prose-invert w-full max-w-none prose-p:m-0">
+                                                <Markdown>{newTitle}</Markdown>
+                                            </article>
+                                        </li>
+                                    );
+                                }
+
                                 return (
                                     <li key={todo.id}>
-                                        <form
-                                            onSubmit={(e) => {
-                                                e.preventDefault();
-                                                updateTodoHandler(todo.id);
-                                            }}
-                                        >
-                                            <div
-                                                className={`${styles.actions} !mt-0`}
-                                            >
-                                                <Button
-                                                    size="small"
-                                                    appearance="primary"
-                                                    type="submit"
-                                                    icon={<Edit16Filled />}
-                                                >
-                                                    Edit
-                                                </Button>
-                                                <Button
-                                                    size="small"
-                                                    appearance="outline"
-                                                    icon={
-                                                        <FontAwesomeIcon
-                                                            icon={faCancel}
-                                                        />
-                                                    }
-                                                    onClick={() =>
-                                                        setTitleEditIndex(-1)
-                                                    }
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </div>
-                                            <div className="p-4">
-                                                <Textarea
-                                                    id={`edit-ta-${i}`}
-                                                    className="w-full"
-                                                    value={newTitle}
-                                                    onKeyDown={(e: any) =>
-                                                        handleKeyDown(
-                                                            e,
-                                                            "edit",
-                                                            todo.id
-                                                        )
-                                                    }
-                                                    onChange={(e: any) => {
-                                                        setTextareaHeight(e);
-                                                        setNewTitle(
-                                                            e.target.value
-                                                        );
-                                                    }}
-                                                />
-                                            </div>
-                                        </form>
-                                        <div className="h-4"></div>
                                         <article className="prose prose-lg prose-invert w-full max-w-none prose-p:m-0">
-                                            <Markdown>{newTitle}</Markdown>
+                                            <Markdown>{todo.title}</Markdown>
                                         </article>
+
+                                        <div className={styles.actions}>
+                                            <Button
+                                                size="small"
+                                                appearance="outline"
+                                                icon={<Edit16Filled />}
+                                                onClick={() =>
+                                                    editTodoInitHandler(
+                                                        i,
+                                                        todo.title
+                                                    )
+                                                }
+                                            >
+                                                Edit
+                                            </Button>
+                                            <Button
+                                                size="small"
+                                                appearance="primary"
+                                                icon={<Checkmark16Filled />}
+                                                onClick={() =>
+                                                    deleteTodoHandler(todo.id)
+                                                }
+                                            >
+                                                Done
+                                            </Button>
+                                        </div>
                                     </li>
                                 );
-                            }
-
-                            return (
-                                <li key={todo.id}>
-                                    <article className="prose prose-lg prose-invert w-full max-w-none prose-p:m-0">
-                                        <Markdown>{todo.title}</Markdown>
-                                    </article>
-
-                                    <div className={styles.actions}>
-                                        <Button
-                                            size="small"
-                                            appearance="outline"
-                                            icon={<Edit16Filled />}
-                                            onClick={() =>
-                                                editTodoInitHandler(
-                                                    i,
-                                                    todo.title
-                                                )
-                                            }
-                                        >
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            size="small"
-                                            appearance="primary"
-                                            icon={<Checkmark16Filled />}
-                                            onClick={() =>
-                                                deleteTodoHandler(todo.id)
-                                            }
-                                        >
-                                            Done
-                                        </Button>
-                                    </div>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                )}
-            </Fade>
-        </div>
+                            })}
+                        </ul>
+                    )}
+                </Fade>
+            </div>
+        </>
     );
 }
