@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
+import { Delete } from "./delete";
 import {
     Button,
     Switch,
@@ -292,7 +293,7 @@ export const Sidebar = () => {
                                 setIsLastOpenedChecked(!isLastOpenedChecked)
                             }
                         />
-                        <Button icon={<Delete24Filled />}>Delete All</Button>
+                        <Delete />
                     </div>
                 </div>
             </aside>
