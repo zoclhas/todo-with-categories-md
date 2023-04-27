@@ -12,6 +12,9 @@ aside.wrapper {
     display: grid;
     grid-template-rows: 0.2fr 2.1fr 0.7fr;
 
+    transform: translateX(-300px);
+    transition: transform 0.3s ease;
+
     .header {
         @apply bg-[#292929] bg-opacity-70 backdrop-blur-xl;
 
@@ -95,6 +98,17 @@ aside.wrapper {
             }
         }
     }
+}
+
+aside.wrapper[data-visible="true"] {
+    transform: translateX(0);
+}
+
+.open {
+    position: fixed;
+    z-index: 10;
+
+    margin: 1.5rem;
 }
 
 .backdrop {

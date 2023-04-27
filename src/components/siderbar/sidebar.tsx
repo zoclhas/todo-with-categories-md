@@ -23,7 +23,7 @@ import {
     Checkmark24Filled,
 } from "@fluentui/react-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCancel, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
 
 import {
     getCategories,
@@ -39,7 +39,7 @@ export const Sidebar = () => {
     const location = useLocation();
 
     // Action States
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const [isLastOpenedChecked, setIsLastOpenedChecked] = useState(true);
 
     // Category States
@@ -51,6 +51,11 @@ export const Sidebar = () => {
 
     useEffect(() => {
         setCategories(getCategories());
+
+        const sidebar = document.querySelector("[data-visible='true']");
+        if (sidebar) {
+            setIsOpen(false);
+        }
     }, [location]);
 
     const navigateToPage = (target: string, cat: string) => {
@@ -121,7 +126,15 @@ export const Sidebar = () => {
 
     return (
         <>
-            <aside className={styles.wrapper}>
+            <div className={styles.open}>
+                <Button
+                    appearance="subtle"
+                    onClick={() => setIsOpen(true)}
+                    icon={<FontAwesomeIcon icon={faBars} />}
+                />
+            </div>
+
+            <aside className={styles.wrapper} data-visible={isOpen}>
                 <div className={styles.header}>
                     <div className={styles.info}>
                         <AppsList24Filled />{" "}
@@ -249,7 +262,7 @@ export const Sidebar = () => {
                                                                 styles.cat
                                                             }
                                                         >
-                                                            <h1>{cat}</h1>
+                                                            <h2>{cat}</h2>
 
                                                             <div
                                                                 className={
