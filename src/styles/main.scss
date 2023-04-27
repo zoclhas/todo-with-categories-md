@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: radial-gradient(
+            at 40% 20%,
+            hsla(221, 100%, 13%, 1) 0px,
+            transparent 50%
+        ),
+        radial-gradient(at 80% 0%, hsla(260, 100%, 10%, 1) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(235, 100%, 10%, 1) 0px, transparent 50%),
+        radial-gradient(at 70% 50%, hsla(283, 100%, 8%, 1) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, hsla(199, 100%, 7%, 1) 0px, transparent 50%),
+        radial-gradient(
+                at 80% 100%,
+                hsla(240, 100%, 9%, 1) 0px,
+                transparent 50%
+            )
+            hsla(240, 100%, 5%, 1);
+    background-repeat: no-repeat;
+
+    animation: backgroundMove 1s linear infinite;
+
+    min-height: 100vh;
+    margin: 0;
+
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system,
+        BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+}
+
+body::after {
+    z-index: -1;
+    content: "";
+    display: block;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-size: 40px 40px;
+    background-image: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.148) 1px,
+        rgba(0, 0, 0, 0) 1px
+    );
+}
+
+.fui-FluentProvider {
+    background: transparent !important;
+}
+
+.prose {
+    width: 100%;
+
+    p {
+        word-wrap: break-word;
+    }
+
+    pre {
+        @apply bg-[#0d0a15] bg-opacity-50;
+        text-shadow: none;
+
+        code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: justify;
+        }
+    }
+}
