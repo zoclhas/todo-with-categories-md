@@ -5,6 +5,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import { Delete } from "./delete";
+import { Fade } from "react-reveal";
 import {
     Button,
     Switch,
@@ -30,6 +31,7 @@ import {
     deleteCategory,
     updateCategory,
     exportData,
+    importData,
 } from "../utils";
 
 export const Sidebar = () => {
@@ -103,6 +105,20 @@ export const Sidebar = () => {
         navigate(`/${newCatName}`);
     };
 
+    // Import States & Functions
+    const [importError, setImportError] = useState<boolean>(false);
+    const importTodoHandler = (e: File) => {
+        importData(e, (success) => {
+            if (success) {
+                console.log();
+                setImportError(false);
+                navigate("/");
+            } else {
+                setImportError(true);
+            }
+        });
+    };
+
     return (
         <>
             <aside className={styles.wrapper}>
@@ -122,135 +138,158 @@ export const Sidebar = () => {
                 </div>
 
                 <div className={styles.categories}>
-                    <ul>
-                        {categories.map((cat, i) => {
-                            if (i === editInput) {
-                                return (
-                                    <li key={i}>
-                                        <Card id={cat}>
-                                            <CardHeader
-                                                header={
-                                                    <form
-                                                        className={
-                                                            styles["edit-cat"]
-                                                        }
-                                                        onSubmit={(e) => {
-                                                            e.preventDefault();
-                                                            updateCatHandler(
-                                                                cat
-                                                            );
-                                                        }}
-                                                    >
-                                                        <Input
-                                                            size="small"
-                                                            style={{
-                                                                flexGrow: "1",
-                                                            }}
-                                                            id={`${cat}-input`}
-                                                            value={newCatName}
-                                                            onChange={(e) =>
-                                                                setNewCatName(
-                                                                    e
-                                                                        .currentTarget
-                                                                        .value
-                                                                )
-                                                            }
-                                                        />
-                                                        <div
-                                                            className={
-                                                                styles.actions
-                                                            }
+                    <Fade bottom cascade duration={500}>
+                        <ul>
+                            {categories.map((cat, i) => {
+                                if (i === editInput) {
+                                    return (
+                                        <li key={i}>
+                                            <Card id={cat}>
+                                                <CardHeader
+                                                    header={
+                                                        <Fade
+                                                            left
+                                                            duration={100}
                                                         >
-                                                            <Button
-                                                                appearance="subtle"
-                                                                type="submit"
-                                                                icon={
-                                                                    <Checkmark24Filled />
+                                                            <form
+                                                                className={
+                                                                    styles[
+                                                                        "edit-cat"
+                                                                    ]
                                                                 }
-                                                            />
-                                                            <Button
-                                                                appearance="subtle"
-                                                                onClick={() => {
-                                                                    setEditInput(
-                                                                        -1
-                                                                    );
-                                                                    setCatName(
-                                                                        ""
+                                                                onSubmit={(
+                                                                    e
+                                                                ) => {
+                                                                    e.preventDefault();
+                                                                    updateCatHandler(
+                                                                        cat
                                                                     );
                                                                 }}
-                                                                icon={
-                                                                    <FontAwesomeIcon
+                                                            >
+                                                                <Input
+                                                                    size="small"
+                                                                    style={{
+                                                                        flexGrow:
+                                                                            "1",
+                                                                    }}
+                                                                    id={`${cat}-input`}
+                                                                    value={
+                                                                        newCatName
+                                                                    }
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        setNewCatName(
+                                                                            e
+                                                                                .currentTarget
+                                                                                .value
+                                                                        )
+                                                                    }
+                                                                />
+                                                                <div
+                                                                    className={
+                                                                        styles.actions
+                                                                    }
+                                                                >
+                                                                    <Button
+                                                                        appearance="subtle"
+                                                                        type="submit"
                                                                         icon={
-                                                                            faCancel
+                                                                            <Checkmark24Filled />
                                                                         }
                                                                     />
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </form>
-                                                }
-                                            />
-                                        </Card>
-                                    </li>
-                                );
-                            }
+                                                                    <Button
+                                                                        appearance="subtle"
+                                                                        onClick={() => {
+                                                                            setEditInput(
+                                                                                -1
+                                                                            );
+                                                                            setCatName(
+                                                                                ""
+                                                                            );
+                                                                        }}
+                                                                        icon={
+                                                                            <FontAwesomeIcon
+                                                                                icon={
+                                                                                    faCancel
+                                                                                }
+                                                                            />
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            </form>
+                                                        </Fade>
+                                                    }
+                                                />
+                                            </Card>
+                                        </li>
+                                    );
+                                }
 
-                            return (
-                                <li key={i}>
-                                    <Link to={`/${cat}`}>
-                                        <Card
-                                            id={cat}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                const { tagName } =
-                                                    e.target as HTMLElement;
+                                return (
+                                    <li key={i}>
+                                        <Link to={`/${cat}`}>
+                                            <Card
+                                                id={cat}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    const { tagName } =
+                                                        e.target as HTMLElement;
 
-                                                navigateToPage(tagName, cat);
-                                            }}
-                                        >
-                                            <CardHeader
-                                                header={
-                                                    <div className={styles.cat}>
-                                                        <h1>{cat}</h1>
-
+                                                    navigateToPage(
+                                                        tagName,
+                                                        cat
+                                                    );
+                                                }}
+                                            >
+                                                <CardHeader
+                                                    header={
                                                         <div
                                                             className={
-                                                                styles.actions
+                                                                styles.cat
                                                             }
                                                         >
-                                                            <Button
-                                                                appearance="subtle"
-                                                                onClick={() => {
-                                                                    editCatInitHandler(
-                                                                        cat,
-                                                                        i
-                                                                    );
-                                                                }}
-                                                                icon={
-                                                                    <Edit24Filled />
+                                                            <h1>{cat}</h1>
+
+                                                            <div
+                                                                className={
+                                                                    styles.actions
                                                                 }
-                                                            />
-                                                            <Button
-                                                                appearance="subtle"
-                                                                onClick={() =>
-                                                                    deleteCatHandler(
-                                                                        cat
-                                                                    )
-                                                                }
-                                                                icon={
-                                                                    <Delete24Filled />
-                                                                }
-                                                            />
+                                                            >
+                                                                <Button
+                                                                    appearance="subtle"
+                                                                    onClick={() => {
+                                                                        editCatInitHandler(
+                                                                            cat,
+                                                                            i
+                                                                        );
+                                                                    }}
+                                                                    icon={
+                                                                        <Edit24Filled />
+                                                                    }
+                                                                />
+                                                                <Button
+                                                                    appearance="subtle"
+                                                                    onClick={() =>
+                                                                        deleteCatHandler(
+                                                                            cat
+                                                                        )
+                                                                    }
+                                                                    icon={
+                                                                        <Delete24Filled />
+                                                                    }
+                                                                />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                }
-                                            />
-                                        </Card>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                                                    }
+                                                />
+                                            </Card>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </Fade>
 
                     <form
                         className={styles.add}
@@ -278,7 +317,25 @@ export const Sidebar = () => {
                 </div>
 
                 <div className={styles.footer}>
-                    <Button icon={<ArrowImport24Filled />}>Import Data</Button>
+                    <div className={styles.import}>
+                        {importError && (
+                            <strong>Error in importing data.</strong>
+                        )}
+                        <input
+                            id="file-import"
+                            type="file"
+                            accept=".json,application/json"
+                            onChange={(e) => {
+                                if (e.target.files) {
+                                    importTodoHandler(e.target.files[0]);
+                                }
+                            }}
+                        />
+                        <label htmlFor="file-import">hi</label>
+                        <Button icon={<ArrowImport24Filled />}>
+                            Import Data
+                        </Button>
+                    </div>
                     <Button
                         icon={<ArrowExportLtr24Filled />}
                         onClick={exportData}

@@ -23,6 +23,7 @@
         "react-dom": "^18.2.0",
         "react-helmet": "^6.1.0",
         "react-markdown": "^8.0.7",
+        "react-reveal": "^1.2.2",
         "react-router": "^6.10.0",
         "react-router-dom": "^6.10.0",
         "rehype-raw": "^6.1.1",
