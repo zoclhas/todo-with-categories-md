@@ -289,7 +289,10 @@ export const importData = (
                 newTodo.push(newCategory);
             }
 
-            localStorage.setItem("todo", JSON.stringify(newTodo));
+            localStorage.setItem(
+                "todo",
+                JSON.stringify(removeAllLastOpened(newTodo))
+            );
             callback(true);
         } else {
             callback(false);

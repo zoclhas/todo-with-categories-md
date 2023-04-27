@@ -38,7 +38,7 @@ body {
 }
 
 body::after {
-    // z-index: 99;
+    z-index: -1;
     content: "";
     display: block;
 
@@ -59,4 +59,23 @@ body::after {
 
 .fui-FluentProvider {
     background: transparent !important;
+}
+
+.prose {
+    width: 100%;
+
+    p {
+        word-wrap: break-word;
+    }
+
+    pre {
+        @apply bg-[#0d0a15] bg-opacity-50;
+        text-shadow: none;
+
+        code {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: justify;
+        }
+    }
 }

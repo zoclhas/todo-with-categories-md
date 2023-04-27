@@ -14,7 +14,9 @@ export default function Home() {
     const lastOpened = getLastOpened();
 
     useEffect(() => {
-        const lastOpenedEnabled = localStorage.getItem("lastOpenedEnabled");
+        const lastOpenedEnabled = localStorage.getItem(
+            "lastOpenedEnabled" || "false"
+        );
         const isEnabled = lastOpenedEnabled === "true" ? true : false;
 
         if (categories.length > 0) {
