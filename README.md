@@ -11,6 +11,7 @@
 
 &nbsp;
 ![Tutorial](/blob/example.gif)
+(gonna change soon, since implemented a new ui)
 
 &nbsp;
 **Currently supported languages**:
