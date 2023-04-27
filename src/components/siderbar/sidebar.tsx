@@ -58,6 +58,17 @@ export const Sidebar = () => {
         }
     }, [location]);
 
+    useEffect(() => {
+        const lastOpened = localStorage.getItem("lastOpenedEnabled");
+        setIsLastOpenedChecked(
+            lastOpened === "true" || lastOpened === null ? true : false
+        );
+
+        if (lastOpened === null) {
+            localStorage.setItem("lastOpenedEnabled", "true");
+        }
+    }, []);
+
     const navigateToPage = (target: string, cat: string) => {
         const ignoredTags = new Set(["BUTTON", "svg", "path"]);
 
@@ -359,9 +370,13 @@ export const Sidebar = () => {
                         <Switch
                             label="Last Opened"
                             checked={isLastOpenedChecked}
-                            onChange={() =>
-                                setIsLastOpenedChecked(!isLastOpenedChecked)
-                            }
+                            onChange={() => {
+                                setIsLastOpenedChecked(!isLastOpenedChecked);
+                                localStorage.setItem(
+                                    "lastOpenedEnabled",
+                                    String(!isLastOpenedChecked)
+                                );
+                            }}
                         />
                         <Delete />
                     </div>

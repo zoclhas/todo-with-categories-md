@@ -3,4 +3,14 @@
 
     display: grid;
     place-items: center;
+
+    svg.arrow {
+        position: absolute;
+        rotate: 90deg;
+
+        left: 0.7rem;
+        top: 4rem;
+
+        opacity: 0.5;
+    }
 }
