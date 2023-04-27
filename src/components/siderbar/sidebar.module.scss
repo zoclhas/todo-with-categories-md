@@ -28,16 +28,27 @@ aside.wrapper {
     }
 
     .categories {
-        @apply bg-[#292929] bg-opacity-60 backdrop-blur-xl h-full overflow-scroll relative;
+        @apply bg-[#292929] bg-opacity-60 backdrop-blur-xl h-full overflow-scroll;
 
         ul {
             @apply flex flex-col gap-4 p-4;
+
+            li {
+                .cat {
+                    @apply flex justify-between items-center;
+                }
+
+                form.edit-cat {
+                    display: flex;
+                    gap: 1rem;
+                }
+            }
         }
 
         form.add {
-            @apply sticky bottom-0 bg-[#292929] bg-opacity-10 backdrop-blur-xl p-4;
+            @apply sticky bottom-0 bg-opacity-10 backdrop-blur-xl p-4;
 
-            margin-top: 1.5rem;
+            margin-top: 1rem;
 
             display: flex;
             justify-content: space-between;

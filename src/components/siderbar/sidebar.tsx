@@ -16,16 +16,19 @@ import {
     ArrowImport24Filled,
     ArrowExportLtr24Filled,
     Delete24Filled,
+    Add24Filled,
+    Edit24Filled,
+    Checkmark24Filled,
 } from "@fluentui/react-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import {
     getCategories,
     createCategory,
     deleteCategory,
     updateCategory,
-    exportData,
+    // exportData,
 } from "../utils";
 
 export const Sidebar = () => {
@@ -39,6 +42,7 @@ export const Sidebar = () => {
     // Category States
     const [categories, setCategories] = useState([]);
     const [catName, setCatName] = useState<string>("");
+    const [addCatValue, setAddCatValue] = useState<string>("");
     const [editInput, setEditInput] = useState<number>(-1);
     const [newCatName, setNewCatName] = useState<string>("");
 
@@ -46,18 +50,56 @@ export const Sidebar = () => {
         setCategories(getCategories());
     }, [location]);
 
+    const navigateToPage = (target: string, cat: string) => {
+        const ignoredTags = new Set(["BUTTON", "svg", "path"]);
+
+        if (!ignoredTags.has(target)) {
+            navigate(`/${cat}`);
+        }
+    };
+
     const createCategoryHandler = () => {
-        createCategory(catName);
+        if (catName.length > 0) {
+            createCategory(catName);
+            setCategories(getCategories());
+            setEditInput(-1);
+
+            navigate(`/${catName}`);
+
+            setCatName("");
+            setAddCatValue("");
+            (
+                document.getElementById("create-input")! as HTMLInputElement
+            ).blur();
+        }
+    };
+
+    const deleteCatHandler = (cat: string) => {
+        deleteCategory(cat);
         setCategories(getCategories());
         setEditInput(-1);
 
-        navigate(`/${catName}`);
+        navigate("/");
+    };
 
-        const createInput = document.getElementById(
-            "create-input"
-        )! as HTMLInputElement;
-        createInput.value = "";
-        // createInput.blur();
+    const editCatInitHandler = (cat: string, index: number) => {
+        setEditInput(index);
+        setNewCatName(cat);
+
+        setTimeout(() => {
+            (
+                document.getElementById(`${cat}-input`)! as HTMLInputElement
+            ).focus();
+        }, 1);
+    };
+
+    const updateCatHandler = (oldName: string) => {
+        updateCategory(oldName, newCatName);
+        setCategories(getCategories());
+        setCatName("");
+        setEditInput(-1);
+
+        navigate(`/${newCatName}`);
     };
 
     return (
@@ -81,29 +123,131 @@ export const Sidebar = () => {
                 <div className={styles.categories}>
                     <ul>
                         {categories.map((cat, i) => {
-                            if (i !== editInput) {
+                            if (i === editInput) {
                                 return (
                                     <li key={i}>
-                                        <Link to={`/${cat}`}>
-                                            <Card
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    navigate(`/${cat}`);
-                                                }}
-                                            >
-                                                <CardHeader
-                                                    className={
-                                                        styles[
-                                                            "cat-list-item-header"
-                                                        ]
-                                                    }
-                                                    header={<h1>{cat}</h1>}
-                                                />
-                                            </Card>
-                                        </Link>
+                                        <Card id={cat}>
+                                            <CardHeader
+                                                header={
+                                                    <form
+                                                        className={
+                                                            styles["edit-cat"]
+                                                        }
+                                                        onSubmit={(e) => {
+                                                            e.preventDefault();
+                                                            updateCatHandler(
+                                                                cat
+                                                            );
+                                                        }}
+                                                    >
+                                                        <Input
+                                                            size="small"
+                                                            style={{
+                                                                flexGrow: "1",
+                                                            }}
+                                                            id={`${cat}-input`}
+                                                            value={newCatName}
+                                                            onChange={(e) =>
+                                                                setNewCatName(
+                                                                    e
+                                                                        .currentTarget
+                                                                        .value
+                                                                )
+                                                            }
+                                                        />
+                                                        <div
+                                                            className={
+                                                                styles.actions
+                                                            }
+                                                        >
+                                                            <Button
+                                                                appearance="subtle"
+                                                                type="submit"
+                                                                icon={
+                                                                    <Checkmark24Filled />
+                                                                }
+                                                            />
+                                                            <Button
+                                                                appearance="subtle"
+                                                                onClick={() => {
+                                                                    setEditInput(
+                                                                        -1
+                                                                    );
+                                                                    setCatName(
+                                                                        ""
+                                                                    );
+                                                                }}
+                                                                icon={
+                                                                    <FontAwesomeIcon
+                                                                        icon={
+                                                                            faCancel
+                                                                        }
+                                                                    />
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </form>
+                                                }
+                                            />
+                                        </Card>
                                     </li>
                                 );
                             }
+
+                            return (
+                                <li key={i}>
+                                    <Link to={`/${cat}`}>
+                                        <Card
+                                            id={cat}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                const { tagName } =
+                                                    e.target as HTMLElement;
+
+                                                navigateToPage(tagName, cat);
+                                            }}
+                                        >
+                                            <CardHeader
+                                                header={
+                                                    <div className={styles.cat}>
+                                                        <h1>{cat}</h1>
+
+                                                        <div
+                                                            className={
+                                                                styles.actions
+                                                            }
+                                                        >
+                                                            <Button
+                                                                appearance="subtle"
+                                                                onClick={() => {
+                                                                    editCatInitHandler(
+                                                                        cat,
+                                                                        i
+                                                                    );
+                                                                }}
+                                                                icon={
+                                                                    <Edit24Filled />
+                                                                }
+                                                            />
+                                                            <Button
+                                                                appearance="subtle"
+                                                                onClick={() =>
+                                                                    deleteCatHandler(
+                                                                        cat
+                                                                    )
+                                                                }
+                                                                icon={
+                                                                    <Delete24Filled />
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                }
+                                            />
+                                        </Card>
+                                    </Link>
+                                </li>
+                            );
                         })}
                     </ul>
 
@@ -117,15 +261,17 @@ export const Sidebar = () => {
                         <Input
                             id="create-input"
                             placeholder="Add Category"
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setCatName(e.currentTarget.value)
-                            }
+                            value={addCatValue}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                setCatName(e.currentTarget.value);
+                                setAddCatValue(e.currentTarget.value);
+                            }}
                         />
                         <Button
                             type="submit"
                             appearance="primary"
                             size="large"
-                            icon={<FontAwesomeIcon icon={faPlus} />}
+                            icon={<Add24Filled />}
                         />
                     </form>
                 </div>

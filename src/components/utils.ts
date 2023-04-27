@@ -11,7 +11,7 @@ export const createCategory = (name: string) => {
         (e: any) => e.cat.toLowerCase() === name.toLowerCase()
     );
 
-    if (categoryExists) {
+    if (categoryExists || name.length === 0) {
         return "Category already exists";
     }
 
