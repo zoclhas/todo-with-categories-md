@@ -186,7 +186,7 @@ export const updateTodo = (cat: string, id: string, newTitle: string) => {
 
 export const exportData = () => {
     const data = JSON.parse(localStorage.getItem("todo") || "[]");
-    const jsonString = JSON.stringify(data);
+    const jsonString = JSON.stringify(data, null, 4);
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 

@@ -28,7 +28,7 @@ import {
     createCategory,
     deleteCategory,
     updateCategory,
-    // exportData,
+    exportData,
 } from "../utils";
 
 export const Sidebar = () => {
@@ -278,7 +278,10 @@ export const Sidebar = () => {
 
                 <div className={styles.footer}>
                     <Button icon={<ArrowImport24Filled />}>Import Data</Button>
-                    <Button icon={<ArrowExportLtr24Filled />}>
+                    <Button
+                        icon={<ArrowExportLtr24Filled />}
+                        onClick={exportData}
+                    >
                         Export Data
                     </Button>
                     <div className={styles.actions}>
