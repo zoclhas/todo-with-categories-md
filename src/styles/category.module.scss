@@ -6,6 +6,7 @@
     padding: 3rem 1rem;
 
     .header,
+    .search,
     .add-wrapper,
     ul.todos {
         @apply bg-[#292929] bg-opacity-25 backdrop-blur-sm p-4 rounded-2xl;
@@ -29,6 +30,14 @@
             .actions {
                 @apply flex gap-2;
             }
+        }
+    }
+
+    .search {
+        margin-top: 1rem;
+
+        :global(.fui-Input) {
+            @apply bg-transparent w-full;
         }
     }
 

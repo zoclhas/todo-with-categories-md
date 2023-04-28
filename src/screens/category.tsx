@@ -11,6 +11,7 @@ import {
     Add24Filled,
     Edit16Filled,
     Checkmark16Filled,
+    Search24Filled,
 } from "@fluentui/react-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCancel } from "@fortawesome/free-solid-svg-icons";
@@ -31,6 +32,8 @@ export default function Category() {
     const cat: string = String(category.cat);
 
     const [todos, setTodos] = useState([]);
+    const [filterKeywords, setFilterKeywords] = useState("");
+    const [filteredTodos, setFilteredTodos] = useState([]);
     const [addTitle, setAddTitle] = useState<string>("");
     const [titleEditIndex, setTitleEditIndex] = useState<number>(-1);
     const [newTitle, setNewTitle] = useState<string>("");
@@ -41,6 +44,8 @@ export default function Category() {
             navigate("/");
         } else {
             setTodos(todos);
+            setFilterKeywords("");
+            setFilteredTodos(todos);
             updateLastOpened(cat);
         }
     }, [cat]);
@@ -112,8 +117,6 @@ export default function Category() {
         }
     };
 
-    const isNotEmpty = todos.length > 0 || addTitle.length > 0;
-
     // Editing Category
     const [isEditing, setIsEditing] = useState(false);
     const [newCatName, setNewCatName] = useState<string>("");
@@ -134,6 +137,24 @@ export default function Category() {
         navigate(`/${newCatName}`);
     };
 
+    // Filtering Todos
+    useEffect(() => {
+        if (todos.length > 0) {
+            const keywords = filterKeywords.split(" ");
+            const filteredTodo = todos.filter((item: any) => {
+                return keywords.every((keyword) => {
+                    return item.title
+                        .toLowerCase()
+                        .includes(keyword.toLowerCase());
+                });
+            });
+
+            setFilteredTodos(filteredTodo);
+        }
+    }, [filterKeywords, todos]);
+
+    const isNotEmpty = addTitle.length > 0 || filteredTodos.length > 0;
+
     return (
         <>
             <Helmet>
@@ -153,8 +174,10 @@ export default function Category() {
                                 id="edit-cat-input"
                                 size="large"
                                 value={newCatName}
-                                onChange={(e) => setNewCatName(e.target.value)}
-                                onKeyDown={(e) => {
+                                onChange={(e: any) =>
+                                    setNewCatName(e.target.value)
+                                }
+                                onKeyDown={(e: any) => {
                                     if (e.key === "Enter") {
                                         if (e.shiftKey) {
                                             e.preventDefault();
@@ -190,6 +213,18 @@ export default function Category() {
                             />
                         </>
                     )}
+                </div>
+
+                <div className={styles.search}>
+                    <Input
+                        size="large"
+                        placeholder="Search"
+                        value={filterKeywords}
+                        onChange={(e: any) => {
+                            setFilterKeywords(e.target.value);
+                        }}
+                        contentBefore={<Search24Filled />}
+                    />
                 </div>
 
                 <div className="h-16"></div>
@@ -230,7 +265,7 @@ export default function Category() {
                                     </article>
                                 </li>
                             )}
-                            {todos.map((todo: any, i) => {
+                            {filteredTodos.map((todo: any, i) => {
                                 if (titleEditIndex === i) {
                                     return (
                                         <li key={todo.id}>
